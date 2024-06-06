@@ -1,5 +1,4 @@
 'use client'
-import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import TaskList from './components/TaskList';
 
@@ -10,6 +9,14 @@ export default function Home() {
   ]);
   const [filter, setFilter] = useState('all');
   const [newTaskText, setNewTaskText] = useState('');
+  const actives = tasks.filter(task => !task.completed).length
+
+  if (actives > 1)
+    var span = `${actives} items left`
+  else if (actives === 1)
+    var span = `${actives} item left`
+  else
+    var span = 'No items left, yay!'
 
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -72,7 +79,7 @@ export default function Home() {
           filter={filter}
         />
         <div className="mt-4 flex justify-between items-center text-sm text-gray-400">
-          <span> {tasks.filter(task => !task.completed).length} items left</span>
+          <span>{span}</span>
           <div>
             <button onClick={() => setFilter('all')} className={`mr-2 ${filter === 'all' ? 'text-white' : ''}`}>All</button>
             <button onClick={() => setFilter('active')} className={`mr-2 ${filter === 'active' ? 'text-white' : ''}`}>Active</button>
